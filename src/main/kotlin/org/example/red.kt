@@ -47,10 +47,12 @@ fun main() {
                     if (firstString == secondString) {
                         excelSH.getRow(1).getCell(2).setCellValue("match")
 //                        println("match")
-                    }
-                    else if (firstSplit[i] == secondSplit[i]) {
-                        excelSH.getRow(1).getCell(2).setCellValue(" match by $counter")
+
+
+                         if (firstSplit[i] == secondSplit[i]) {
+                            excelSH.getRow(1).getCell(2).setCellValue(" match by $counter")
 //                        println("match by $counter")
+                        }
                     }
                     else
                         excelSH.getRow(1).getCell(2).setCellValue(" not match")
@@ -67,7 +69,7 @@ fun main() {
             val outputStream = FileOutputStream("./name_match.xls")
             excelWK.write(outputStream)
             excelWK.close()
-//            outputStream.close()
+            outputStream.close()
 
         } catch (ex: IOException) {
             ex.printStackTrace()
