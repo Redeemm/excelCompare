@@ -1,7 +1,6 @@
 package org.example
 
 import org.apache.poi.EncryptedDocumentException
-import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -18,51 +17,42 @@ fun main() {
             while (count < excelSH.lastRowNum) {
 
                 val row = excelSH.getRow(count)
-                val cellOne = row.getCell(0)
-                val cellTwo = row.getCell(1)
+                row.getCell(2)
 
-                when (cellOne.cellType) {
-                    CellType.STRING -> cellOne.stringCellValue
-                    else -> {}
-                }
-                when (cellTwo.cellType) {
-                    CellType.STRING -> cellTwo.stringCellValue
-                    else -> {}
-                }
 
-                val firstString = cellOne.stringCellValue.toString().uppercase()
-                val secondString = cellTwo.stringCellValue.toString().uppercase()
-                var counter = 0
+                excelSH.getRow(count).getCell(0).stringCellValue.toString().uppercase()
+                excelSH.getRow(count).getCell(1).stringCellValue.toString().uppercase()
+                count += 1
+            }
+            val firstSplit = excelSH.getRow(count).getCell(0).stringCellValue.toString().uppercase().split(","," ", "-", ". ", " .")
+            val  secondSplit = excelSH.getRow(count).getCell(0).stringCellValue.toString().uppercase().split(","," ", "-",". ", " .")
 
-                val firstSplit = firstString.split(","," ", "-", ". ", " .")
-                val secondSplit = secondString.split(","," ", "-",". ", " .")
 
-                val createRow = excelSH.createRow(1)
-                createRow.createCell(2)
+            val cellThree = excelSH.getRow(count)
 
-                var i = 0
-                while (i < firstSplit.lastIndex) {
+
+            var counter = 0
+            var k = 0
+            while (k < cellThree.lastCellNum) {
+                for (i in 0..firstSplit.lastIndex) {
                     counter += 1
 
-                    if (firstString == secondString) {
-                        excelSH.getRow(1).getCell(2).setCellValue("match")
-//                        println("match")
+                    if (firstSplit == secondSplit) {
+                        excelSH.getRow(1).createCell(2).setCellValue("match")
 
 
                          if (firstSplit[i] == secondSplit[i]) {
                             excelSH.getRow(1).getCell(2).setCellValue(" match by $counter")
-//                        println("match by $counter")
                         }
                     }
                     else
                         excelSH.getRow(1).getCell(2).setCellValue(" not match")
-//                            println("not match")
-
-                    i++
                 }
-                inputStream.close()
-                count += 1
+
+                k++
             }
+                inputStream.close()
+
 
             println("Code is correctly written")
 
