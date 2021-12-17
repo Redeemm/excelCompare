@@ -15,25 +15,26 @@ fun main () {
         val wlSh = wlBk.getSheetAt(0)
 
 
-
         for (count in 1.. wlSh.lastRowNum) {
             val readerOne = wlSh.getRow(count).getCell(0).stringCellValue.split(" ")
             val readerSecond = wlSh.getRow(count).getCell(1).stringCellValue.split(" ")
             val readerThree = wlSh.getRow(count).createCell(2)
 
-            if (readerOne == readerSecond) {
-                println("match")
-                readerThree.setCellValue("match")
+            var flag = 0
+            var i = 0
 
-            } else {
-                println("not match")
-                readerThree.setCellValue("not match")
+            while (i < readerOne.lastIndex) {
+
+                if (readerOne[i] in readerSecond) {
+                    flag += 1
+                }
+                i++
             }
 
-
+            println("$count match by $flag")
+            readerThree.setCellValue("match by $flag")
 
         }
-
         inputStream.close()
 
         val outputStream = FileOutputStream(path)
@@ -46,8 +47,4 @@ fun main () {
     } catch (ex: EncryptedDocumentException) {
         ex.printStackTrace()
     }
-}
-
-fun excelRead() {
-
 }
