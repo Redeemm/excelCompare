@@ -16,8 +16,8 @@ fun main () {
 
 
         for (count in 1.. wlSh.lastRowNum) {
-            val readerOne = wlSh.getRow(count).getCell(0).stringCellValue.split(" ")
-            val readerSecond = wlSh.getRow(count).getCell(1).stringCellValue.split(" ")
+            val readerOne = wlSh.getRow(count).getCell(0).stringCellValue.split(" ", ".", "//s")
+            val readerSecond = wlSh.getRow(count).getCell(1).stringCellValue.split(" ",".", "//s")
             val readerThree = wlSh.getRow(count).createCell(2)
 
             var flag = 0
