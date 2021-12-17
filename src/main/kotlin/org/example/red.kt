@@ -6,64 +6,45 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-fun main() {
-        val path = "./name_match.xlsx"
-        try {
-            val inputStream = FileInputStream(path)
-            val excelWK = WorkbookFactory.create(inputStream)
-            val excelSH = excelWK.getSheetAt(0)
+fun main () {
+    val path = "./name_match.xlsx"
 
-            var count = 1
-            while (count < excelSH.lastRowNum) {
-
-                val row = excelSH.getRow(count)
-                row.getCell(2)
+    try {
+        val inputStream = FileInputStream(path)
+        val wlBk = WorkbookFactory.create(inputStream)
+        val wlSh = wlBk.getSheetAt(0)
 
 
-                excelSH.getRow(count).getCell(0).stringCellValue.toString().uppercase()
-                excelSH.getRow(count).getCell(1).stringCellValue.toString().uppercase()
-                count += 1
-            }
-            val firstSplit = excelSH.getRow(count).getCell(0).stringCellValue.toString().uppercase().split(","," ", "-", ". ", " .")
-            val  secondSplit = excelSH.getRow(count).getCell(0).stringCellValue.toString().uppercase().split(","," ", "-",". ", " .")
+        for (count in 1.. wlSh.lastRowNum) {
+            val readerOne = wlSh.getRow(count).getCell(0).stringCellValue.split(" ")
+            val readerSecond = wlSh.getRow(count).getCell(1).stringCellValue.split(" ")
+            val readerThree = wlSh.getRow(count).createCell(2)
 
+            var flag = 0
+            var i = 0
 
-            val cellThree = excelSH.getRow(count)
+            while (i < readerOne.lastIndex) {
 
-
-            var counter = 0
-            var k = 0
-            while (k < cellThree.lastCellNum) {
-                for (i in 0..firstSplit.lastIndex) {
-                    counter += 1
-
-                    if (firstSplit == secondSplit) {
-                        excelSH.getRow(1).createCell(2).setCellValue("match")
-
-
-                         if (firstSplit[i] == secondSplit[i]) {
-                            excelSH.getRow(1).getCell(2).setCellValue(" match by $counter")
-                        }
-                    }
-                    else
-                        excelSH.getRow(1).getCell(2).setCellValue(" not match")
+                if (readerOne[i] in readerSecond) {
+                    flag += 1
                 }
-
-                k++
+                i++
             }
-                inputStream.close()
 
+            println("$count: match by $flag")
+            readerThree.setCellValue("match by $flag")
 
-            println("Code is correctly written")
-
-            val outputStream = FileOutputStream("./name_match.xls")
-            excelWK.write(outputStream)
-            excelWK.close()
-            outputStream.close()
-
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        } catch (ex: EncryptedDocumentException) {
-            ex.printStackTrace()
         }
+        inputStream.close()
+
+        val outputStream = FileOutputStream(path)
+        wlBk.write(outputStream)
+        wlBk.close()
+        outputStream.close()
+
+    } catch (ex: IOException) {
+        ex.printStackTrace()
+    } catch (ex: EncryptedDocumentException) {
+        ex.printStackTrace()
     }
+}
