@@ -11,35 +11,37 @@ fun main () {
 
     try {
         val inputStream = FileInputStream(path)
-        val wlBk = WorkbookFactory.create(inputStream)
-        val wlSh = wlBk.getSheetAt(0)
+        val excelWB = WorkbookFactory.create(inputStream)
+        val excelSH = excelWB.getSheetAt(0)
 
+        for (count in 1.. excelSH.lastRowNum) {
+            val readerOne = excelSH.getRow(count).getCell(0).stringCellValue.split(" ", "-", "//s")
+            val readerSecond = excelSH.getRow(count).getCell(1).stringCellValue.split(" ", "-", "//s")
+            val readerThree = excelSH.getRow(count).createCell(2)
 
-        for (count in 1.. wlSh.lastRowNum) {
-            val readerOne = wlSh.getRow(count).getCell(0).stringCellValue.split(" ", ".", "//s")
-            val readerSecond = wlSh.getRow(count).getCell(1).stringCellValue.split(" ",".", "//s")
-            val readerThree = wlSh.getRow(count).createCell(2)
-
-            var flag = 0
+            var flag = 1
             var i = 0
 
             while (i < readerOne.lastIndex) {
-
                 if (readerOne[i] in readerSecond) {
                     flag += 1
                 }
                 i++
             }
 
-            println("$count: match by $flag")
-            readerThree.setCellValue("match by $flag")
-
+            when(true) {
+                readerOne.containsAll(readerSecond) -> readerThree.setCellValue("match")
+                readerOne[i] in readerSecond -> readerThree.setCellValue("match by $flag")
+                else -> readerThree.setCellValue("not match")
+            }
         }
+
+        println("code written successfully ")
         inputStream.close()
 
         val outputStream = FileOutputStream(path)
-        wlBk.write(outputStream)
-        wlBk.close()
+        excelWB.write(outputStream)
+        excelWB.close()
         outputStream.close()
 
     } catch (ex: IOException) {
