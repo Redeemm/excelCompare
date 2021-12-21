@@ -61,7 +61,7 @@ fun main () {
         inputStram_2.close()
 
 
-        val outputStream = FileOutputStream("./resultResult.xlsx")
+        val outputStream = FileOutputStream("./outputResult.xlsx")
         excelWB.write(outputStream)
         excelWB.close()
         outputStream.close()
